@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.nkhurshid.controllers"},{"l":"com.nkhurshid.daos"},{"l":"com.nkhurshid.models"},{"l":"com.nkhurshid.services"},{"l":"com.nkhurshid.util"}];updateSearchResults();

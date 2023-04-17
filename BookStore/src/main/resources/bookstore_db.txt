@@ -1,0 +1,100 @@
+DROP DATABASE IF EXISTS bookstore;
+CREATE DATABASE IF NOT EXISTS bookstore;
+USE bookstore;
+SELECT 'CREATING DATABASE STRUCTURE' as 'INFO'; 
+DROP TABLE IF EXISTS user, user_order, book, author, book_order, book_author;
+
+-- CREATE TABLES
+
+CREATE TABLE user (
+	user_id int NOT NULL AUTO_INCREMENT, 
+	first_name varchar(255), 
+	last_name varchar(255), 
+	door_number int,
+	street_name varchar(255), 
+	postcode varchar(7),
+	email varchar(255), 
+	password varchar(255), 
+	CONSTRAINT pk_user PRIMARY KEY (user_id)
+);
+
+CREATE TABLE user_order (
+	user_order_id int NOT NULL AUTO_INCREMENT, 
+	user_id int NOT NULL, 
+	order_date timestamp DEFAULT CURRENT_TIMESTAMP(), 
+	total_price decimal(10,2), 
+	CONSTRAINT pk_user_order PRIMARY KEY(user_order_id), 
+	CONSTRAINT fk_user_id_1 FOREIGN KEY (user_id) REFERENCES user(user_id)
+);
+
+CREATE TABLE book (
+	book_isbn int NOT NULL, 
+	book_name varchar(255), 
+	overview varchar(255),  
+	price decimal(10,2), 
+	CONSTRAINT pk_book_isbn PRIMARY KEY(book_isbn)
+);
+
+CREATE TABLE author (
+	author_id int NOT NULL AUTO_INCREMENT,
+	first_name varchar(255),
+	last_name varchar(255),
+	CONSTRAINT pk_author PRIMARY KEY (author_id)	
+);
+
+CREATE TABLE book_order (
+	book_isbn int NOT NULL, 
+	user_order_id int NOT NULL, 
+	quantity int, 
+	CONSTRAINT fk_book_isbn_1 FOREIGN KEY (book_isbn) REFERENCES book(book_isbn), 
+	CONSTRAINT fk_user_order_1 FOREIGN KEY (user_order_id) REFERENCES user_order(user_order_id)
+);
+
+CREATE TABLE book_author (
+	author_id int NOT NULL,
+	book_isbn int NOT NULL,
+	CONSTRAINT pk_book_author PRIMARY KEY (author_id, book_isbn),
+	CONSTRAINT fk_author_id_1 FOREIGN KEY (author_id) REFERENCES author(author_id),
+	CONSTRAINT fk_book_isbn_2 FOREIGN KEY (book_isbn) REFERENCES book(book_isbn)
+);
+
+-- POPULATE TABLES
+
+INSERT INTO user (first_name, last_name, door_number, street_name, postcode, email, password)
+VALUES ("Nabeeha", "Khurshid", 145, "Fairlands Avenue", "CR7 6HJ", "nk@gmail.com", "password"),
+	("Heet", "Kadam", 7, "Earlwoods Avenue", "CR7 6DL", "hk@gmail.com", "password"),
+	("Sona", "Sudra", 131, "Fairfield Road", "CR4 2OP", "ss@gmail.com", "password");
+
+INSERT INTO book (book_isbn, book_name, overview, price) 
+VALUES (123123123, "Persuasion", "About a woman who's persuaded to give up the love of her life.", 5.00),
+	(111011100, "It Ends With Us", "A heart-wrenching story and an unforgettable tale of love that comes at the ultimate price.", 7.00),
+	(664882923, "How To Stop Time", "A man who doesn't age battles the demons of his past while trying to stay undercover.", 8.99),
+	(1423157370, "The Darkest Minds", "In a dystopian USA where teenage children with superpowers are imprisoned, Ruby Daly escapes her prison and joins a resistance group to fight for her future.", 10.99),
+	(1423157516, "Never Fade", "In this thrilling sequel to The Darkest Minds, Ruby must call upon her abilities on a daily basis, leading dangerous missions to bring down a corrupt government and breaking into the minds of her enemies.", 10.99);
+
+INSERT INTO author (first_name, last_name)
+VALUES ("Jane", "Austen"),
+	("Colleen", "Hoover"),
+	("Matt", "Haig"),
+	("Alexandra", "Bracken");
+
+INSERT INTO book_author (book_isbn, author_id)
+VALUES (123123123, 1),
+	(111011100, 2),
+	(664882923, 3),
+	(1423157370, 5),
+	(1423157516, 5);
+
+INSERT INTO user_order (user_id, total_price)
+VALUES (1, 7.00),
+	(2, 5.00),
+	(1, 14.99);
+
+INSERT INTO book_order (book_isbn, user_order_id, quantity)
+VALUES (111011100, 1, 1),
+	(123123123, 2, 1),
+	(664882923, 3, 1),
+	(123123123, 3, 1);
+
+
+
